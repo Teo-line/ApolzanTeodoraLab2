@@ -6,4 +6,6 @@ public class ApolzanTeodoraLab2Context(DbContextOptions<ApolzanTeodoraLab2Contex
     public DbSet<ApolzanTeodoraLab2.Models.Publisher> Publisher { get; set; } = default!;
 
     public DbSet<ApolzanTeodoraLab2.Models.Author> Author { get; set; } = default!;
+
+    public DbSet<ApolzanTeodoraLab2.Models.Category> Category { get; set; } = default!;
 }

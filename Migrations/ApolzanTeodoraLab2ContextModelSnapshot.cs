@@ -15,7 +15,7 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261020094511_BDAuthor";
+    public override string LastMigrationId => "20261025114115_BookCategoryModif";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -80,6 +80,46 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
                 b.ToTable("Book");
             });
 
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.BookCategory", b =>
+            {
+                var iD = b.Property<int>("ID")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(iD);
+
+                b.Property<int>("BookID")
+                    .HasColumnType("int");
+
+                b.Property<int>("CategoryID")
+                    .HasColumnType("int");
+
+                b.HasKey("ID");
+
+                b.HasIndex("BookID");
+
+                b.HasIndex("CategoryID");
+
+                b.ToTable("BookCategory");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Category", b =>
+            {
+                var iD = b.Property<int>("ID")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(iD);
+
+                b.Property<string>("CategoryName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("ID");
+
+                b.ToTable("Category");
+            });
+
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Publisher", b =>
             {
                 var iD = b.Property<int>("ID")
@@ -110,6 +150,35 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
                 b.Navigation("Author");
 
                 b.Navigation("Publisher");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.BookCategory", b =>
+            {
+                b.HasOne("ApolzanTeodoraLab2.Models.Book", "Book")
+                    .WithMany("BookCategories")
+                    .HasForeignKey("BookID")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.HasOne("ApolzanTeodoraLab2.Models.Category", "Category")
+                    .WithMany("BookCategories")
+                    .HasForeignKey("CategoryID")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("Book");
+
+                b.Navigation("Category");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Book", b =>
+            {
+                b.Navigation("BookCategories");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Category", b =>
+            {
+                b.Navigation("BookCategories");
             });
 
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Publisher", b =>
