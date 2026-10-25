@@ -19,9 +19,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Author[0].LastName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author[0].AuthorId)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -38,9 +35,9 @@
                 @Html.DisplayFor(model => item.AuthorId)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.AuthorId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.AuthorId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.AuthorId">Delete</a>
+                <a asp-page="./Edit" asp-route-authorid="@item.AuthorId">Edit</a> |
+                <a asp-page="./Details" asp-route-authorid="@item.AuthorId">Details</a> |
+                <a asp-page="./Delete" asp-route-authorid="@item.AuthorId">Delete</a>
             </td>
         </tr>
 }

@@ -18,7 +18,9 @@ public class CreateModel : PageModel
     public IActionResult OnGet()
     {
         ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID",
-"PublisherName");
+        "PublisherName");
+
+        ViewData["AuthorID"] = new SelectList(_context.Set<Author>(), "AuthorId", "LastName");
 
         return Page();
     }

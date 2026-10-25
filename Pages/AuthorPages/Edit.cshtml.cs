@@ -31,7 +31,6 @@ public class EditModel : PageModel
             return NotFound();
         }
         Author = author;
-        ViewData["AuthorId"] = new SelectList(_context.Author, "AuthorId", "AuthorId");
         return Page();
     }
 

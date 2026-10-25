@@ -17,7 +17,6 @@ public class CreateModel : PageModel
 
     public IActionResult OnGet()
     {
-        ViewData["AuthorId"] = new SelectList(_context.Author, "AuthorId", "AuthorId");
         return Page();
     }
 
@@ -32,7 +31,8 @@ public class CreateModel : PageModel
             return Page();
         }
 
-        
+        _context.Author.Add(Author);
+        await _context.SaveChangesAsync();
         return RedirectToPage("./Index");
     }
 }
