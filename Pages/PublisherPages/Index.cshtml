@@ -43,3 +43,30 @@
 }
     </tbody>
 </table>
+
+@if (Model.PublisherData.Books != null)
+{
+    <h3>Books Edited by Selected Publisher</h3>
+    <table class="table">
+
+        @foreach (var item in Model.PublisherData.Publishers)
+        {
+            string selectedRow = "";
+            if (item.ID == Model.PublisherID)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @{
+                        foreach (var b in item.Books)
+                        {
+                            @b.Title @:  @b.Author?.FullName
+                            <br />
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
