@@ -5,59 +5,62 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Borrowings</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Borrowing[0].MemberID)
+                Member
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Borrowing[0].Member)
+                Book
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Borrowing[0].BookID)
+                Author
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Borrowing[0].Book)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Borrowing[0].Book.Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Borrowing[0].ReturnDate)
+                Return Date
             </th>
             <th></th>
         </tr>
     </thead>
+
     <tbody>
-@foreach (var item in Model.Borrowing) {
-        <tr>
-            <td>
-                @Html.DisplayFor(model => item.Member.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Member)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Book.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Book.Author.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.ReturnDate)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Borrowing)
+        {
+            <tr>
+                <td>
+                    @item.Member?.FullName
+                </td>
+
+                <td>
+                    @item.Book?.Title
+                </td>
+
+                <td>
+                    @item.Book?.Author?.FullName
+                </td>
+
+                <td>
+                    @Html.DisplayFor(model => item.ReturnDate)
+                </td>
+
+                <td>
+                    <a asp-page="./Edit"
+                       asp-route-id="@item.ID">Edit</a> |
+
+                    <a asp-page="./Details"
+                       asp-route-id="@item.ID">Details</a> |
+
+                    <a asp-page="./Delete"
+                       asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

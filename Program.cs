@@ -1,28 +1,41 @@
+
 using ApolzanTeodoraLab2.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ApolzanTeodoraLab2Context") ?? throw new InvalidOperationException("Connection string 'ApolzanTeodoraLab2Context' not found.");
 
-// 1. Your primary context
+var connectionString = builder.Configuration
+    .GetConnectionString("ApolzanTeodoraLab2Context")
+    ?? throw new InvalidOperationException(
+        "Connection string not found.");
+
+// Contextul principal al aplicației
 builder.Services.AddDbContext<ApolzanTeodoraLab2Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ApolzanTeodoraLab2Context") ?? throw new InvalidOperationException("Connection string 'ApolzanTeodoraLab2Context' not found.")));
+    options.UseSqlServer(connectionString));
 
-// 2. Your identity context (FIXED: Added  here)
+// Contextul pentru Identity
 builder.Services.AddDbContext<LibraryIdentityContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryIdentityContext") ?? throw new InvalidOperationException("Connection string 'LibraryIdentityContext' not found.")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("LibraryIdentityContext")
+        ?? throw new InvalidOperationException(
+            "Identity connection string not found.")));
 
-// Add services to the container.
+// Configurarea Identity
+builder.Services
+    .AddDefaultIdentity<ApplicationUser>(options =>
+    {
+        options.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddEntityFrameworkStores<LibraryIdentityContext>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -30,6 +43,7 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

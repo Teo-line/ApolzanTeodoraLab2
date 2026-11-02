@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -15,31 +16,48 @@ public class CreateModel : PageModel
         _context = context;
     }
 
-    public IActionResult OnGet()
-    {
-        var bookList = _context.Book.Include(b => b.Author).Select(x => new
-        {
-            x.ID,
-            BookFullName = x.Title + " - " + x.Author.FirstName + " " + x.Author.LastName
-        });
-
-        ViewData["BookID"] = new SelectList(bookList, "ID", "BookFullName"); 
-        ViewData["MemberID"] = new SelectList(_context.Member, "ID", "FullName");
-        return Page();
-    }
-
     [BindProperty]
     public Borrowing Borrowing { get; set; } = default!;
 
-    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD.
+    public async Task<IActionResult> OnGetAsync()
+    {
+        await PopulateDropDownLists();
+        return Page();
+    }
+
+    private async Task PopulateDropDownLists()
+    {
+        var bookList = await _context.Book
+            .Include(b => b.Author)
+            .Select(x => new
+            {
+                x.ID,
+                BookFullName = x.Title + " - " +
+                    (x.Author != null
+                        ? x.Author.FirstName + " " + x.Author.LastName
+                        : "Unknown author")
+            })
+            .ToListAsync();
+
+        ViewData["BookID"] = new SelectList(
+            bookList, "ID", "BookFullName");
+
+        var members = await _context.Member.ToListAsync();
+
+        ViewData["MemberID"] = new SelectList(
+            members, "ID", "FullName");
+    }
+
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
         {
+            await PopulateDropDownLists();
             return Page();
         }
 
         _context.Borrowing.Add(Borrowing);
+
         await _context.SaveChangesAsync();
 
         return RedirectToPage("./Index");

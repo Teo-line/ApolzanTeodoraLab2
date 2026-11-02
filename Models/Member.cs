@@ -1,14 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
 namespace ApolzanTeodoraLab2.Models
 {
     public class Member
     {
         public int ID { get; set; }
+
         public string? FirstName { get; set; }
+
         public string? LastName { get; set; }
+
         public string? Address { get; set; }
-        public string Email { get; set; }
+
+        public string Email { get; set; } = string.Empty;
+
         public string? Phone { get; set; }
 
         [Display(Name = "Full Name")]
@@ -19,6 +25,7 @@ namespace ApolzanTeodoraLab2.Models
                 return FirstName + " " + LastName;
             }
         }
+
         public ICollection<Borrowing>? Borrowings { get; set; }
     }
 }

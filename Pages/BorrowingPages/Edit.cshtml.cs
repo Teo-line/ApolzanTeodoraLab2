@@ -1,6 +1,8 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ApolzanTeodoraLab2.Models;
 
 namespace ApolzanTeodoraLab2.Pages.BorrowingPages;
@@ -19,52 +21,71 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        if (id is null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var borrowing = await _context.Borrowing.FirstOrDefaultAsync(m => m.ID == id);
-        if (borrowing is null)
+        Borrowing = await _context.Borrowing
+            .FirstOrDefaultAsync(m => m.ID == id);
+
+        if (Borrowing == null)
         {
             return NotFound();
         }
-        Borrowing = borrowing;
+
+        await PopulateDropDownLists();
+
         return Page();
     }
 
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see https://aka.ms/RazorPagesCRUD.
+    private async Task PopulateDropDownLists()
+    {
+        var members = await _context.Member.ToListAsync();
+
+        ViewData["MemberID"] = new SelectList(
+            members, "ID", "FullName",
+            Borrowing.MemberID);
+
+        var books = await _context.Book
+            .Include(b => b.Author)
+            .Select(b => new
+            {
+                b.ID,
+                BookFullName = b.Title + " - " +
+                    (b.Author != null
+                        ? b.Author.FirstName + " " + b.Author.LastName
+                        : "Unknown author")
+            })
+            .ToListAsync();
+
+        ViewData["BookID"] = new SelectList(
+            books, "ID", "BookFullName",
+            Borrowing.BookID);
+    }
+
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
         {
+            await PopulateDropDownLists();
             return Page();
         }
 
-        _context.Attach(Borrowing).State = EntityState.Modified;
+        var borrowingToUpdate = await _context.Borrowing
+            .FirstOrDefaultAsync(b => b.ID == Borrowing.ID);
 
-        try
+        if (borrowingToUpdate == null)
         {
-            await _context.SaveChangesAsync();
+            return NotFound();
         }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!BorrowingExists(Borrowing.ID))
-            {
-                return NotFound();
-            }
-            else
-            {
-                throw;
-            }
-        }
+
+        borrowingToUpdate.MemberID = Borrowing.MemberID;
+        borrowingToUpdate.BookID = Borrowing.BookID;
+        borrowingToUpdate.ReturnDate = Borrowing.ReturnDate;
+
+        await _context.SaveChangesAsync();
 
         return RedirectToPage("./Index");
-    }
-
-    private bool BorrowingExists(int id)
-    {
-        return _context.Borrowing.Any(e => e.ID == id);
     }
 }
