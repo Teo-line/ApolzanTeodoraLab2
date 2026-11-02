@@ -1,8 +1,17 @@
+using ApolzanTeodoraLab2.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("ApolzanTeodoraLab2Context") ?? throw new InvalidOperationException("Connection string 'ApolzanTeodoraLab2Context' not found.");
 
-builder.Services.AddDbContext<ApolzanTeodoraLab2Context>(options => options.UseSqlServer(connectionString));
+// 1. Your primary context
+builder.Services.AddDbContext<ApolzanTeodoraLab2Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ApolzanTeodoraLab2Context") ?? throw new InvalidOperationException("Connection string 'ApolzanTeodoraLab2Context' not found.")));
+
+// 2. Your identity context (FIXED: Added  here)
+builder.Services.AddDbContext<LibraryIdentityContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LibraryIdentityContext") ?? throw new InvalidOperationException("Connection string 'LibraryIdentityContext' not found.")));
 
 // Add services to the container.
 builder.Services.AddRazorPages();

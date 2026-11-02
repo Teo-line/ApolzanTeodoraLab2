@@ -8,4 +8,7 @@ public class ApolzanTeodoraLab2Context(DbContextOptions<ApolzanTeodoraLab2Contex
     public DbSet<ApolzanTeodoraLab2.Models.Author> Author { get; set; } = default!;
 
     public DbSet<ApolzanTeodoraLab2.Models.Category> Category { get; set; } = default!;
+
+    public DbSet<ApolzanTeodoraLab2.Models.Borrowing> Borrowing { get; set; } = default!;
+    public DbSet<ApolzanTeodoraLab2.Models.Member> Member { get; set; } = default!;
 }

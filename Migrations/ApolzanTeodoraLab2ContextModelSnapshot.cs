@@ -15,7 +15,7 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261025114115_BookCategoryModif";
+    public override string LastMigrationId => "20261102121254_Borrowings";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -103,6 +103,32 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
                 b.ToTable("BookCategory");
             });
 
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Borrowing", b =>
+            {
+                var iD = b.Property<int>("ID")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(iD);
+
+                b.Property<int?>("BookID")
+                    .HasColumnType("int");
+
+                b.Property<int?>("MemberID")
+                    .HasColumnType("int");
+
+                b.Property<DateTime>("ReturnDate")
+                    .HasColumnType("datetime2");
+
+                b.HasKey("ID");
+
+                b.HasIndex("BookID");
+
+                b.HasIndex("MemberID");
+
+                b.ToTable("Borrowing");
+            });
+
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Category", b =>
             {
                 var iD = b.Property<int>("ID")
@@ -118,6 +144,35 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
                 b.HasKey("ID");
 
                 b.ToTable("Category");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Member", b =>
+            {
+                var iD = b.Property<int>("ID")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
+
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(iD);
+
+                b.Property<string>("Address")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Email")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("FirstName")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("LastName")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Phone")
+                    .HasColumnType("nvarchar(max)");
+
+                b.HasKey("ID");
+
+                b.ToTable("Member");
             });
 
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Publisher", b =>
@@ -140,7 +195,7 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Book", b =>
             {
                 b.HasOne("ApolzanTeodoraLab2.Models.Author", "Author")
-                    .WithMany()
+                    .WithMany("Books")
                     .HasForeignKey("AuthorID");
 
                 b.HasOne("ApolzanTeodoraLab2.Models.Publisher", "Publisher")
@@ -171,14 +226,41 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
                 b.Navigation("Category");
             });
 
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Borrowing", b =>
+            {
+                b.HasOne("ApolzanTeodoraLab2.Models.Book", "Book")
+                    .WithMany("Borrowings")
+                    .HasForeignKey("BookID");
+
+                b.HasOne("ApolzanTeodoraLab2.Models.Member", "Member")
+                    .WithMany("Borrowings")
+                    .HasForeignKey("MemberID");
+
+                b.Navigation("Book");
+
+                b.Navigation("Member");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Author", b =>
+            {
+                b.Navigation("Books");
+            });
+
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Book", b =>
             {
                 b.Navigation("BookCategories");
+
+                b.Navigation("Borrowings");
             });
 
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Category", b =>
             {
                 b.Navigation("BookCategories");
+            });
+
+        modelBuilder.Entity("ApolzanTeodoraLab2.Models.Member", b =>
+            {
+                b.Navigation("Borrowings");
             });
 
         modelBuilder.Entity("ApolzanTeodoraLab2.Models.Publisher", b =>
