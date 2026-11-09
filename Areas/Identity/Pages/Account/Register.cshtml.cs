@@ -148,6 +148,8 @@ public class RegisterModel : PageModel
                 _context.Member.Add(Member);
                 await _context.SaveChangesAsync();
 
+                var role = await _userManager.AddToRoleAsync(user, "USER");
+
                 var userId = await _userManager.GetUserIdAsync(user);
 
                 var code = await _userManager

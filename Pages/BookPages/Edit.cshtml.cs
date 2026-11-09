@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApolzanTeodoraLab2.Pages.BookPages;
 
+[Authorize(Roles = "ADMIN")]
 public class EditModel : BookCategoriesPageModel
 {
     private readonly ApolzanTeodoraLab2Context _context;

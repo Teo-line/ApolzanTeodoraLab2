@@ -15,13 +15,13 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261102121254_Borrowings";
+    public override string LastMigrationId => "20261109144817_ValidationRules";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
 #pragma warning disable 612, 618
         modelBuilder
-            .HasAnnotation("ProductVersion", "11.0.0-rc.2.26504.105")
+            .HasAnnotation("ProductVersion", "11.0.0-rc.3.26522.148")
             .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
         SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -69,7 +69,8 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
 
                 b.Property<string>("Title")
                     .IsRequired()
-                    .HasColumnType("nvarchar(max)");
+                    .HasMaxLength(150)
+                    .HasColumnType("nvarchar(150)");
 
                 b.HasKey("ID");
 
@@ -155,17 +156,20 @@ partial class ApolzanTeodoraLab2ContextModelSnapshot : ModelSnapshot
                 SqlServerPropertyBuilderExtensions.UseIdentityColumn(iD);
 
                 b.Property<string>("Address")
-                    .HasColumnType("nvarchar(max)");
+                    .HasMaxLength(70)
+                    .HasColumnType("nvarchar(70)");
 
                 b.Property<string>("Email")
                     .IsRequired()
                     .HasColumnType("nvarchar(max)");
 
                 b.Property<string>("FirstName")
-                    .HasColumnType("nvarchar(max)");
+                    .HasMaxLength(30)
+                    .HasColumnType("nvarchar(30)");
 
                 b.Property<string>("LastName")
-                    .HasColumnType("nvarchar(max)");
+                    .HasMaxLength(30)
+                    .HasColumnType("nvarchar(30)");
 
                 b.Property<string>("Phone")
                     .HasColumnType("nvarchar(max)");

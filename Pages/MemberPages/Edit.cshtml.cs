@@ -1,10 +1,13 @@
+using ApolzanTeodoraLab2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ApolzanTeodoraLab2.Models;
 
 namespace ApolzanTeodoraLab2.Pages.MemberPages;
 
+
+[Authorize(Roles = "ADMIN")]    
 public class EditModel : PageModel
 {
     private readonly ApolzanTeodoraLab2Context _context;

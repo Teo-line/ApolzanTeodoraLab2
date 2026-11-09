@@ -2,12 +2,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ApolzanTeodoraLab2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApolzanTeodoraLab2.Pages.BookPages;
 
+[Authorize(Roles = "ADMIN")]
 public class DeleteModel : PageModel
 {
     private readonly ApolzanTeodoraLab2Context _context;
+
 
     public DeleteModel(ApolzanTeodoraLab2Context context)
     {
